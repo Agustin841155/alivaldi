@@ -1,0 +1,48 @@
+{% extends 'htmls/base.html'%}
+
+{% block content %}
+{% load static %}
+<p> Lista de Clientes en la Base de Datos </p>
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+<tr>
+    <td>nombre producto</td>
+    <td>Descripcion</td>
+    <td>Categoria</td>
+    <td>Cantidad en stock</td>
+    <td>precio</td>
+    <td>fecha de ingreso</td>
+    <td>estado del producto</td>
+    <td>proveedor</td>
+    <td>ultima modificacion</td>
+    
+    <td>
+        <a href="{% url 'home' %}" class="btn btn.outline-sucess">
+            <i class="fas fa-plus"></i>
+        </a>
+    </td>
+    </thead>
+    <tbody>
+        {% for Inventarioalmacen in listar_inventarioAlmacen %}
+            <tr>
+                <td>{{Inventarioalmacen.nombre_producto}}</td>
+                <td>{{Inventarioalmacen.descripcion}}</td>
+                <td>{{Inventarioalmacen.categoria}}</td>
+                <td>{{Inventarioalmacen.cantidad_en_stock}}</td>
+                <td>{{Inventarioalmacen.precio}}</td>
+                <td>{{Inventarioalmacen.fecha_ingreso}}</td>
+                <td>{{Inventarioalmacen.estado_producto}}</td>
+                <td>{{Inventarioalmacen.proveedor}}</td>
+                <td>{{Inventarioalmacen.ultima_modificacion}}</td>
+                
+            </tr>
+        {% endfor %}
+    </tbody>
+</tr>
+</table>
+<div>
+    <a href="{% url 'home' %}" class= "btn btn-secondary btn-block btn-lg">
+        <i class="fas fa-stream"></i> Regresar al formulario de Clientes
+    </a>
+</div>
+{% endblock content %}

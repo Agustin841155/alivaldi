@@ -1,0 +1,20 @@
+{% extends 'htmls/base.html' %}
+{% load static %}
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <div class="company-logo">
+            <img src="{% static 'img/alivaldi.jpg' %}" alt="Logo de la empresa">
+        </div>
+        <div class="login-form">
+            <h3>Iniciar Sesión</h3>
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Nombre de usuario">
+                <input type="password" name="password" placeholder="Contraseña">
+                <input type="submit" value="Entrar">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

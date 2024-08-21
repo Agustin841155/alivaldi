@@ -1,0 +1,34 @@
+{% extends 'htmls/base.html'%}
+{% block content %}
+
+<h3>Inventario</h3>
+
+{% if user.is_superuser %}
+    <!-- Contenido exclusivo para el administrador -->
+    <h1>Bienvenido, Administrador</h1>
+    <p>Aquí está el contenido solo visible para el administrador.</p>
+    <div>
+        <a href="{% url 'listar_categorias' %}" class= "btn btn-secondary btn-block btn-lg">
+            <i class="fas fa-stream"></i> listado
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'formInventarioAlmacen' %}" class= "btn btn-secondary btn-block btn-lg">
+            <i class="fas fa-stream"></i> Formulario almacen
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'listar_inventarioAlmacen' %}" class= "btn btn-secondary btn-block btn-lg">
+            <i class="fas fa-stream"></i> listado
+        </a>
+    </div>
+   
+    
+{% else %}
+    <!-- Contenido visible para otros usuarios -->
+    <h1>Bienvenido, Usuario</h1>
+    <p>Aquí está el contenido visible para los usuarios regulares.</p>
+{% endif %}
+
+{% endblock %}
+

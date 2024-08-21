@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alivaldi</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href={% url 'home' %}>Inicio</a></li>
+            <li><a href={% url 'inventario' %}>Inventario</a></li>
+            {% if request.user.is_authenticated %}
+                <li><a href={% url 'exit' %}>Log Out</a></li>
+            {% else %}
+                <li><a href={% url 'login' %}>Inicia Sesión</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Aquí puedes insertar contenido de otras páginas -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
+
+

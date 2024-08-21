@@ -1,0 +1,15 @@
+{% extends 'htmls/base.html'%}
+
+{% block content %}
+{% load static %}
+    <h1>Formulario de inventario Almacen</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form}}
+        <button>
+            save
+        </button>
+    </form>
+
+
+{% endblock content %}
