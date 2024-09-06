@@ -5,25 +5,68 @@
 
 {% if user.is_superuser %}
     <!-- Contenido exclusivo para el administrador -->
-    <h1>Bienvenido, Administrador</h1>
-    <p>Aquí está el contenido solo visible para el administrador.</p>
-    <div>
-        <a href="{% url 'listar_categorias' %}" class= "btn btn-secondary btn-block btn-lg">
-            <i class="fas fa-stream"></i> listado
-        </a>
+    <h1>Bienvenido, Administrador {{user.username | upper }}</h1>
+    <p> Tabla de los inventarios en alivaldi</p>
+    <br>
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="border-bottom font-weight-bold">
+            <tr>
+                <th scope="col">Acceso a Inventario</th>
+                <th scope="col">Descripción</th>
+                
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>
+                            <a href="{% url 'listar_categorias' %}" class="btn btn-block btn-sm custom-btn">
+                                <i class="fas fa-file-alt"></i> Categorias
+                            </a>
+                        </td>
+                        <td>Tabla que contiene el listado de las categorias que son usadas en alivaldi</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url 'listar_inventarioAlmacen' %}" class="btn btn-block btn-sm custom-btn">
+                                <i class="fas fa-file-alt"></i> Inventario Almacen
+                            </a>
+                        </td>
+                        <td>Tabla que contiene el inventario en el almacen de alivaldi</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url 'listar_proveedores' %}" class="btn btn-block btn-sm custom-btn">
+                                <i class="fas fa-file-alt"></i> Inventario Proveedores
+                            </a>
+                        </td>
+                        <td>Tabla que contiene  el inventario de proveedores en alivaldi</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url 'listar_inventarioTienda' %}" class="btn btn-block btn-sm custom-btn">
+                                <i class="fas fa-file-alt"></i> Inventario Tienda
+                            </a>
+                        </td>
+                        <td>Tabla del inventario de tienda en alivaldi</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url 'listar_rotacionInventario' %}" class="btn btn-block btn-sm custom-btn">
+                                <i class="fas fa-file-alt"></i> Rotacion de Inventario
+                            </a>
+                    
+                        </td>
+                        <td>Tabla de las rotaciones de categorias en alivaldi</td>
+                    </tr>
+                    
+                </tbody>
+            </tr>
+            </table>
+        </div>
     </div>
-    <div>
-        <a href="{% url 'formInventarioAlmacen' %}" class= "btn btn-secondary btn-block btn-lg">
-            <i class="fas fa-stream"></i> Formulario almacen
-        </a>
-    </div>
-    <div>
-        <a href="{% url 'listar_inventarioAlmacen' %}" class= "btn btn-secondary btn-block btn-lg">
-            <i class="fas fa-stream"></i> listado
-        </a>
-    </div>
-   
-    
+
+
 {% else %}
     <!-- Contenido visible para otros usuarios -->
     <h1>Bienvenido, Usuario</h1>

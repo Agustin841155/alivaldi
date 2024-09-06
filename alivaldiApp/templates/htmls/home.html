@@ -1,14 +1,68 @@
-{% extends 'htmls/base.html'%}
+{% extends 'htmls/base.html' %}
 {% block content %}
-
+{% load static %}
 <h3>Inicio</h3>
-{% if request.user.is_authenticated %}
+{% if not request.user.is_authenticated %}
     <hr>
-    <h4>
-        {{user.username | upper }}, Bienvenido
-    </h4>
+    <h4>Bienvenido a Alivaldi</h4>
+
+    <!-- Información de la empresa con imágenes -->
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Misión -->
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'img/alivaldi.jpg' %}" class="card-img-top" alt="Misión Alivaldi">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Misión</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            Ofrecer a nuestros clientes una gran variedad en cuanto a vestimenta, con calidad y a precios muy accesibles, 
+                            buscando satisfacer las necesidades de la comunidad, consiguiendo una rentabilidad adecuada y mejorando la calidad de vida de nuestros colaboradores.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visión -->
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'img/alivaldi.jpg' %}" class="card-img-top" alt="Visión Alivaldi">
+                    <div class="card-header bg-success text-white">
+                        <h5>Visión</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            Ser una tienda de ropa de segunda mano referente para nuestros clientes, donde busquen vestirse y sentirse bien, ayudando a la economía de las personas 
+                            pero a la vez otorgando una experiencia única a través de un equipo de trabajo, basado en confianza, respeto y honestidad, lo que nos permitirá crecer continuamente impulsando una sólida proyección a futuro.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Valores -->
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'img/alivaldi.jpg' %}" class="card-img-top" alt="Valores Alivaldi">
+                    <div class="card-header bg-warning text-white">
+                        <h5>Valores</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Honestidad</li>
+                            <li>Lealtad</li>
+                            <li>Compromiso</li>
+                            <li>Diciiplina</li>
+                            <li>Responsabilidad</li>
+                            <li>Competitividad</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin de la información de la empresa -->
+
 {% endif %}
-
-
-
 {% endblock %}

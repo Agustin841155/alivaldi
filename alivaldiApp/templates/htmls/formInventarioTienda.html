@@ -2,12 +2,12 @@
 
 {% block content %}
 {% load static %}
-    <h1>Formulario de inventario Almacen</h1>
+    <h1>Formulario de inventario Tienda</h1>
     <form action="" method="post">
         {% csrf_token %}
-        {{formInvAlm.as_p}}
+        {{formInvTi.as_p}}
         <button>
-            Guardar
+            save
         </button>
     </form>
 

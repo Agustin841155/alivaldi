@@ -137,7 +137,7 @@ class DjangoSession(models.Model):
 class Inventarioalmacen(models.Model):
     nombre_producto = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)
-    categoria = models.ForeignKey(Categorias, models.DO_NOTHING)
+    categoria = models.ForeignKey(Categorias, on_delete=models.CASCADE)
     cantidad_en_stock = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
@@ -151,9 +151,9 @@ class Inventarioalmacen(models.Model):
 
 
 class Inventariotienda(models.Model):
-    categoria = models.ForeignKey(Categorias, models.DO_NOTHING)
+    categoria = models.ForeignKey(Categorias,on_delete=models.CASCADE)
     cantidad_en_stock = models.IntegerField()
-    fecha_actualizacion = models.DateTimeField(blank=True, null=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
     actualizado_por = models.CharField(max_length=100)
 
     class Meta:
@@ -173,3 +173,15 @@ class Proveedores(models.Model):
     class Meta:
         managed = False
         db_table = 'proveedores'
+
+class Rotacioninventario(models.Model):
+    categoria_origen = models.ForeignKey(Categorias, on_delete=models.CASCADE)
+    categoria_destino = models.ForeignKey(Categorias, on_delete=models.CASCADE, related_name='rotacioninventario_categoria_destino_set')
+    cantidad_movida = models.IntegerField()
+    fecha_movimiento = models.DateTimeField(auto_now=True)
+    realizado_por = models.CharField(max_length=100)
+    comentario = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'rotacioninventario'

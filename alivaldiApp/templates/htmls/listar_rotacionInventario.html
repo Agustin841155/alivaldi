@@ -1,0 +1,58 @@
+{% extends 'htmls/base.html'%}
+
+{% block content %}
+{% load static %}
+<p> Lista Rotacion del inventario </p>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="border-bottom font-weight-bold">
+        <tr>
+            <th scope="col">Categoria de origen</th>
+            <th  scope="col">Categoria de destino</th>
+            <th scope="col">Cantidad Movida</th>
+            <th scope="col">Fecha movimiento</th>
+            <th scope="col">Realizado por</th>
+            <th scope="col">Comentario</th>
+            <th scope="col">Editar Registro</th>
+            <th scope="col">Eliminar Registro</th>
+
+            </thead>
+            <tbody>
+                {% for Rotacioninventario in listar_rotacionInventario %}
+                    <tr>
+                        <td>{{Rotacioninventario.categoria_origen}}</td>
+                        <td>{{Rotacioninventario.categoria_destino}}</td>
+                        <td>{{Rotacioninventario.cantidad_movida}}</td>
+                        <td>{{Rotacioninventario.fecha_movimiento}}</td>
+                        <td>{{Rotacioninventario.realizado_por}}</td>
+                        <td>{{Rotacioninventario.comentario}}</td>
+                        <td>
+                            <a href="{% url 'update_rotacionInventario' Rotacioninventario.id %}" class="btn text-secondary px-0">
+                                <i class="far fa-edit fa-lg"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <form action="{% url 'delete_rotacionInventario' Rotacioninventario.id %}" method="POST" class="d-inline">
+                            {%csrf_token%}
+                            <button type="submit" class="btn" >
+                                <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                            </button>
+                            </form>
+                        </td> 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </tr>
+        </table>
+    </div>
+</div>
+<div>
+    <a href="{% url 'inventario' %}" class="btn btn-block btn-sm custom-btn">
+        <i class="fas fa-arrow-left"></i> Regresar
+    </a>
+    <a href="{% url 'formRotacionInventario' %}" class="btn btn-block btn-sm custom-btn">
+        <i class="fas fa-plus"></i> Agregar registro
+    </a>
+</div>
+{% endblock content %}

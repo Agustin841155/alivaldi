@@ -2,35 +2,38 @@
 
 {% block content %}
 {% load static %}
-<p> Lista de Categorias </p>
+<h3> Listado de Inventario de tienda</h3>
 <div class="container">
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="border-bottom font-weight-bold">
         <tr>
             <th scope="col">Categoria</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Editar registro</th>
-            <th scope="col">Eliminar registro</th>
+            <th scope="col">Cantidad_en_stock</th>
+            <th scope="col">Fecha_actualizacion</th>
+            <th scope="col">Actualizado Por</th>
+            <th scope="col">Editar Registro</th>
+            <th scope="col">Eliminar Registro</th>
             
             </thead>
             <tbody class="table-group-divider">
-                {% for Categorias in listar_categorias %}
+                {% for Inventariotienda in listar_inventarioTienda %}
                     <tr>
-                        <td>{{Categorias.nombre}}</td>
-                        <td>{{Categorias.descripcion}}</td>
+                        <td>{{Inventariotienda.categoria}}</td>
+                        <td>{{Inventariotienda.cantidad_en_stock}}</td>
+                        <td>{{Inventariotienda.fecha_actualizacion}}</td>
+                        <td>{{Inventariotienda.actualizado_por}}</td>
                         <td>
-                            <a href="{% url 'update_categorias' Categorias.id %}" class="btn text-secondary px-0">
+                            <a href="{% url 'update_inventarioTienda' Inventariotienda.id %}" class="btn text-secondary px-0">
                                 <i class="far fa-edit fa-lg"></i>
                             </a>
                         </td>
-                        <td>
-                            <form action="{% url 'delete_categoria' Categorias.id %}" method="POST" class="d-inline">
+                        <td><form action="{% url 'delete_inventarioTienda' Inventariotienda.id %}" method="POST" class="d-inline">
                             {%csrf_token%}
                             <button type="submit" class="btn" >
                                 <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
                             </button>
-                            </form>
+                        </form>
                         </td> 
                     </tr>
                 {% endfor %}
@@ -43,9 +46,8 @@
     <a href="{% url 'inventario' %}" class="btn btn-block btn-sm custom-btn">
         <i class="fas fa-arrow-left"></i> Regresar
     </a>
-    <a href="{% url 'formCategorias' %}" class="btn btn-block btn-sm custom-btn">
+    <a href="{% url 'formInventarioTienda' %}" class="btn btn-block btn-sm custom-btn">
         <i class="fas fa-plus"></i> Agregar registro
-    </a>   
+    </a>
 </div>
-
 {% endblock content %}
