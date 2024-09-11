@@ -1,16 +1,34 @@
 {% extends 'htmls/base.html'%}
+{% load crispy_forms_tags %}
 
 {% block content %}
 {% load static %}
     <h1>Formulario de Rotacion de inventario</h1>
     {{errorRot}}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{formRot.as_p}}
-        <button>
-            save
-        </button>
-    </form>
+    <hr>
+    <br>
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{formRot | crispy}}
+                        <br>
+                      
+                        <button class="btn btn-block btn-sm custom-btn">
+                            <i class="fas fa-folder-plus"></i> Guardar
+                        </button>
+                        <a href="{% url 'listar_rotacionInventario' %}" class="btn btn-block btn-sm custom-btn">
+                            <i class="fas fa-arrow-left"></i> Regresar
+                        </a>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
 
 
 {% endblock content %}
