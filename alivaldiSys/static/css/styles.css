@@ -60,7 +60,7 @@ nav ul li a:hover {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 650px; /* Ajuste el ancho según sea necesario */
+    width: 600px; /* Ajuste el ancho según sea necesario */
 }
 
 .company-logo img {
@@ -113,4 +113,34 @@ nav ul li a:hover {
 
 .custom-btn:hover {
     background-color: #6A5ACD !important; /* Morado oscuro al pasar el mouse */
+}
+
+/* Estilos para los mensajes de éxito, error y advertencia */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Estilos para el mensaje de error */
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Estilos para el mensaje de éxito */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Estilos para el mensaje de advertencia */
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
 }

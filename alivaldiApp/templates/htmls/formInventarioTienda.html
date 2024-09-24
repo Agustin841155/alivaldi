@@ -4,12 +4,20 @@
 {% block content %}
 {% load static %}
     <h1>Formulario de inventario Tienda</h1>
+    {{errorInvTienda}}
     <hr>
     <br>
     <div class="row">
         <div class="col-12 col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-body">
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <form action="" method="post">
                         {% csrf_token %}
                         {{formInvTi | crispy}}

@@ -6,6 +6,13 @@
 <hr>
 <br>
 <div class="container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="border-bottom font-weight-bold">
@@ -30,12 +37,13 @@
                                 <i class="far fa-edit fa-lg"></i>
                             </a>
                         </td>
-                        <td><form action="{% url 'delete_proveedores' Proveedores.id %}" method="POST" class="d-inline">
-                            {%csrf_token%}
-                            <button type="submit" class="btn" >
-                                <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        <td>
+                            <button type="button" class="btn text-danger px-0" onclick="confirmDelete('{{ Proveedores.id }}')">
+                                <i class="far fa-trash-alt fa-lg"></i>
                             </button>
-                        </form>
+                            <form id="delete-form-{{ Proveedores.id }}" action="{% url 'delete_proveedores' Proveedores.id %}" method="POST" style="display: none;">
+                                {% csrf_token %}
+                            </form>
                         </td> 
                     </tr>
                 {% endfor %}
@@ -52,4 +60,38 @@
         <i class="fas fa-plus"></i> Agregar registro
     </a>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro que deseas eliminar este Proveedor? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let proveedorIdToDelete = null;
+
+    function confirmDelete(proveedorId) {
+        proveedorIdToDelete = proveedorId;
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        if (proveedorIdToDelete) {
+            document.getElementById('delete-form-' + proveedorIdToDelete).submit();
+        }
+    });
+</script>
 {% endblock content %}

@@ -6,6 +6,13 @@
 <hr>
 <br>
 <div class="container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="border-bottom font-weight-bold">
@@ -35,11 +42,11 @@
                             </a>
                         </td>
                         <td>
-                            <form action="{% url 'delete_rotacionInventario' Rotacioninventario.id %}" method="POST" class="d-inline">
-                            {%csrf_token%}
-                            <button type="submit" class="btn" >
-                                <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                            <button type="button" class="btn text-danger px-0" onclick="confirmDelete('{{ Rotacioninventario.id }}')">
+                                <i class="far fa-trash-alt fa-lg"></i>
                             </button>
+                            <form id="delete-form-{{ Rotacioninventario.id }}" action="{% url 'delete_rotacionInventario' Rotacioninventario.id %}" method="POST" style="display: none;">
+                                {% csrf_token %}
                             </form>
                         </td> 
                     </tr>
@@ -57,4 +64,38 @@
         <i class="fas fa-plus"></i> Agregar registro
     </a>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro que deseas eliminar esta Rotación de Tienda? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let rotTiendaIdToDelete = null;
+
+    function confirmDelete(categoryId) {
+        rotTiendaIdToDelete = categoryId;
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        if (rotTiendaIdToDelete) {
+            document.getElementById('delete-form-' + rotTiendaIdToDelete).submit();
+        }
+    });
+</script>
 {% endblock content %}

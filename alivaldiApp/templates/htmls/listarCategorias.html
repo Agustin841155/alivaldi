@@ -1,4 +1,4 @@
-{% extends 'htmls/base.html'%}
+{% extends 'htmls/base.html' %}
 
 {% block content %}
 {% load static %}
@@ -6,38 +6,44 @@
 <hr>
 <br>
 <div class="container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead class="border-bottom font-weight-bold">
-        <tr>
-            <th scope="col">Categoria</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Editar registro</th>
-            <th scope="col">Eliminar registro</th>
-            
+                <tr>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Editar registro</th>
+                    <th scope="col">Eliminar registro</th>
+                </tr>
             </thead>
             <tbody class="table-group-divider">
                 {% for Categorias in listar_categorias %}
                     <tr>
-                        <td>{{Categorias.nombre}}</td>
-                        <td>{{Categorias.descripcion}}</td>
+                        <td>{{ Categorias.nombre }}</td>
+                        <td>{{ Categorias.descripcion }}</td>
                         <td>
                             <a href="{% url 'update_categorias' Categorias.id %}" class="btn text-secondary px-0">
                                 <i class="far fa-edit fa-lg"></i>
                             </a>
                         </td>
                         <td>
-                            <form action="{% url 'delete_categoria' Categorias.id %}" method="POST" class="d-inline">
-                            {%csrf_token%}
-                            <button type="submit" class="btn" >
-                                <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                            <button type="button" class="btn text-danger px-0" onclick="confirmDelete('{{ Categorias.id }}')">
+                                <i class="far fa-trash-alt fa-lg"></i>
                             </button>
+                            <form id="delete-form-{{ Categorias.id }}" action="{% url 'delete_categoria' Categorias.id %}" method="POST" style="display: none;">
+                                {% csrf_token %}
                             </form>
                         </td> 
                     </tr>
                 {% endfor %}
             </tbody>
-        </tr>
         </table>
     </div>
 </div>
@@ -49,5 +55,41 @@
         <i class="fas fa-plus"></i> Agregar registro
     </a>   
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro que deseas eliminar esta categoría? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let categoryIdToDelete = null;
+
+    function confirmDelete(categoryId) {
+        categoryIdToDelete = categoryId;
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        if (categoryIdToDelete) {
+            document.getElementById('delete-form-' + categoryIdToDelete).submit();
+        }
+    });
+</script>
+
 
 {% endblock content %}

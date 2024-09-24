@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'alivaldiApp',
     "crispy_forms",
     "crispy_bootstrap4",
+    
 ]
 
 MIDDLEWARE = [
@@ -136,9 +137,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #variables de redireccion de login y logout
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'inventario'
 LOGOUT_REDIRECT_URL = 'home'
 
 #template formularios bootstrap 4
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# Etiquetas de mensajes MIDDLEWARE
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',  # Para usar las clases de Bootstrap
+}
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
