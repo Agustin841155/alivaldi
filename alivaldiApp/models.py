@@ -155,6 +155,8 @@ class Inventariotienda(models.Model):
     cantidad_en_stock = models.IntegerField()
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     actualizado_por = models.CharField(max_length=100)
+    tipo_de_ropa = models.ForeignKey('Tiposderopa', models.DO_NOTHING, db_column='tipo_de_ropa')
+    descripcion = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -185,3 +187,14 @@ class Rotacioninventario(models.Model):
     class Meta:
         managed = False
         db_table = 'rotacioninventario'
+
+class Tiposderopa(models.Model):
+    tipo = models.CharField(max_length=100)
+    descripcion = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.tipo
+
+    class Meta:
+        managed = False
+        db_table = 'tiposderopa'

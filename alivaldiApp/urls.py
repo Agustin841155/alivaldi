@@ -33,4 +33,9 @@ urlpatterns = [
     path('formulario_rotacionInventario/', views.form_rotacionInventario,name='formRotacionInventario'),
     path('rotacionInventario/<int:rotacion_id>/', views.actualizar_rotacionInventario, name= 'update_rotacionInventario'),
     path('eliminarrotacionInventario/<int:rotacion_id>/', views.eliminar_rotacionInventario, name= 'delete_rotacionInventario'),
+
+    path('listar_tiposRopa/', views.listar_tiposRopa,name='listar_tiposRopa'),
+    path('formulario_tiposRopa/', views.form_tiposRopa,name='formTiposRopa'),
+    path('tiposRopa/<int:tipoRopa_id>/', views.actualiza_tiposRopa, name= 'update_tiposRopa'),
+    path('eliminarTiposRopa/<int:tipoRopa_id>/', views.eliminar_tipoRopa, name= 'delete_tiposRopa'),
 ]

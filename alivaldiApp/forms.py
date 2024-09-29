@@ -1,5 +1,5 @@
 from django import forms
-from .models import Categorias, Inventarioalmacen, Proveedores,Inventariotienda,Rotacioninventario
+from .models import Categorias, Inventarioalmacen, Proveedores,Inventariotienda,Rotacioninventario,Tiposderopa
 
 
 class CategoriaForm(forms.ModelForm):
@@ -7,8 +7,8 @@ class CategoriaForm(forms.ModelForm):
         model = Categorias
         fields = '__all__' 
         labels={
-            'nombre':'tipo de categoria',
-            'descripcion':'descripcion de la categoria',
+            'Nombre':'tipo de categoria',
+            'Descripción':'descripcion de la categoria',
             
         }  
 
@@ -26,9 +26,14 @@ class ProveedorForm(forms.ModelForm):
 class InventarioTiendaForm(forms.ModelForm):
     class Meta:
         model = Inventariotienda
-        fields = ['categoria', 'cantidad_en_stock', 'actualizado_por']
+        fields = ['categoria', 'cantidad_en_stock', 'actualizado_por', 'tipo_de_ropa', 'descripcion']
 
 class RotacionInventarioForm(forms.ModelForm):
     class Meta:
         model = Rotacioninventario
         fields = ['categoria_origen', 'categoria_destino', 'cantidad_movida','realizado_por','comentario']
+
+class TiposRopaForm(forms.ModelForm):
+    class Meta:
+        model = Tiposderopa
+        fields = ['tipo','descripcion']

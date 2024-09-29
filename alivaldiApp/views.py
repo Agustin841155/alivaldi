@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Categorias,Inventarioalmacen,Proveedores,Inventariotienda,Rotacioninventario
-from .forms import InventarioForm,CategoriaForm,ProveedorForm,InventarioTiendaForm,RotacionInventarioForm
+from .models import Categorias,Inventarioalmacen,Proveedores,Inventariotienda,Rotacioninventario,Tiposderopa
+from .forms import InventarioForm,CategoriaForm,ProveedorForm,InventarioTiendaForm,RotacionInventarioForm,TiposRopaForm
 
 # vista del home
 def home(request):
@@ -47,7 +47,10 @@ def listar_rotacionInventario(request):
     context = {'listar_rotacionInventario' : Rotacioninventario.objects.all()}
     return render(request, 'htmls/listar_rotacionInventario.html',context)
 
-
+#listado de la tabla de los tipos de ropa
+def listar_tiposRopa(request):
+    context = {'listar_tiposRopa' : Tiposderopa.objects.all()}
+    return render(request, 'htmls/listar_tiposRopa.html',context)
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -140,6 +143,22 @@ def form_rotacionInventario(request):
             messages.add_message(request=request, level=messages.ERROR, message='Error al agregar Rotación de inventario')
             return redirect('listar_rotacionInventario')
 
+#formulario Tipos de Ropa
+def form_tiposRopa(request):
+    if request.method == 'GET': 
+        return render(request, 'htmls/formTiposRopa.html', {
+            'formTipRop': TiposRopaForm
+        })
+    else:
+        form= TiposRopaForm(request.POST)
+        if form.is_valid():
+            new_datos = form.save(commit=False)
+            new_datos.save()
+            messages.add_message(request=request, level=messages.SUCCESS, message='Tipo de Ropa agregado con éxito')
+            return redirect('listar_tiposRopa')
+        else:
+            messages.add_message(request=request, level=messages.ERROR, message='Error al agregar Tipo de Ropa')
+            return redirect('listar_tiposRopa')
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -241,15 +260,53 @@ def actualizar_rotacionInventario(request,rotacion_id):
             messages.add_message(request=request, level=messages.ERROR, message='Error al actualizar Rotación de inventario')
             return redirect('listar_rotacionInventario')
 
+#actualizar(update) Tipos de Ropa:
+def actualiza_tiposRopa(request,tipoRopa_id):
+    if request.method == 'GET':
+            tiposRop= get_object_or_404(Tiposderopa,pk=tipoRopa_id)
+            formtiposRopa = TiposRopaForm(instance=tiposRop)
+            return render(request, 'htmls/formTiposRopa.html', {
+                'formTipRop': formtiposRopa
+            })
+    else:
+        try:
+            tiposRop= get_object_or_404(Tiposderopa,pk=tipoRopa_id)
+            formtiposRopa= TiposRopaForm(request.POST, instance=tiposRop)
+            formtiposRopa.save()
+            messages.add_message(request=request, level=messages.SUCCESS, message='Tipo de Ropa actualizada con éxito')
+            return redirect('listar_tiposRopa')
+        except ValueError:
+            messages.add_message(request=request, level=messages.ERROR, message='Error al actualizar Tipo de Ropa')
+            return redirect('listar_tiposRopa')
+
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 #eliminar categoria:
-def eliminar_categoria(request,categoria_id):
-    elimCat = get_object_or_404(Categorias,pk=categoria_id)
-    elimCat.delete()
-    messages.add_message(request, messages.SUCCESS, 'Categoría eliminada correctamente.')
+def eliminar_categoria(request, categoria_id):
+    if request.method == "POST":
+        elimCat = get_object_or_404(Categorias, pk=categoria_id)
+        
+        # Obtener la contraseña ingresada por el usuario
+        password = request.POST.get('password')
+        
+        # Obtener el usuario autenticado
+        user = request.user
+        
+        # Verificar si el usuario está autenticado y es superusuario
+        if user.is_authenticated and user.is_superuser:
+            # Autenticar al usuario con la contraseña proporcionada
+            authenticated_user = authenticate(request, username=user.username, password=password)
+            if authenticated_user is not None:
+                # Si la autenticación es exitosa, eliminar la categoría
+                elimCat.delete()
+                messages.success(request, 'Categoría eliminada correctamente.')
+            else:
+                messages.error(request, 'Contraseña incorrecta. No se pudo eliminar la categoría.')
+        else:
+            messages.error(request, 'No tienes permisos para realizar esta acción.')
+    
     return redirect('listar_categorias')
 
 #eliminar Inventario almacen:
@@ -279,3 +336,10 @@ def eliminar_rotacionInventario(request,rotacion_id):
     elimRot.delete()
     messages.add_message(request, messages.SUCCESS, 'Rotación de Inventario eliminada correctamente')
     return redirect('listar_rotacionInventario')
+
+#eliminar Tipo de Ropa:
+def eliminar_tipoRopa(request,tipoRopa_id):
+    elimTipoRopa = get_object_or_404(Tiposderopa,pk=tipoRopa_id)
+    elimTipoRopa.delete()
+    messages.add_message(request, messages.SUCCESS, 'Tipo de Ropa eliminado correctamente')
+    return redirect('listar_tiposRopa')
