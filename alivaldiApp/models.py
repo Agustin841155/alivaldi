@@ -85,7 +85,7 @@ class Categorias(models.Model):
         return self.nombre
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'categorias'
 
 

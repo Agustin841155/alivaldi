@@ -57,7 +57,8 @@
     </a>
 </div>
 
-<!-- Modal -->
+
+<!-- Modal 1: Confirmar eliminación -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -66,7 +67,30 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                ¿Estás seguro que deseas eliminar este tipo de ropa? Esta acción no se puede deshacer.
+                <p>¿Estás seguro que deseas eliminar esta categoría? Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="openPasswordModalButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Solicitar contraseña -->
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="modalPasswordTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPasswordTitle">Ingresar contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Para confirmar la eliminación, por favor ingresa tu contraseña de usuario:</p>
+                <div class="form-group">
+                    <label for="passwordConfirm">Contraseña:</label>
+                    <input type="password" id="passwordConfirm" class="form-control" required>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
@@ -84,9 +108,28 @@
         $('#confirmDeleteModal').modal('show');
     }
 
+    document.getElementById('openPasswordModalButton').addEventListener('click', function() {
+        $('#confirmDeleteModal').modal('hide');  // Cerrar el primer modal
+        $('#passwordModal').modal('show');  // Abrir el segundo modal
+    });
+
     document.getElementById('confirmDeleteButton').addEventListener('click', function() {
-        if (tipoRopaIdToDelete) {
-            document.getElementById('delete-form-' + tipoRopaIdToDelete).submit();
+        const password = document.getElementById('passwordConfirm').value;
+
+        if (tipoRopaIdToDelete && password) {
+            const form = document.getElementById('delete-form-' + tipoRopaIdToDelete);
+
+            // Añadir el campo oculto para la contraseña
+            const passwordInput = document.createElement('input');
+            passwordInput.type = 'hidden';
+            passwordInput.name = 'password';
+            passwordInput.value = password;
+            form.appendChild(passwordInput);
+
+            // Enviar el formulario
+            form.submit();
+        } else {
+            alert('Por favor ingresa tu contraseña.');
         }
     });
 </script>

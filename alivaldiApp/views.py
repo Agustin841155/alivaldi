@@ -5,12 +5,30 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.views.generic import TemplateView
+from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
 from .models import Categorias,Inventarioalmacen,Proveedores,Inventariotienda,Rotacioninventario,Tiposderopa
 from .forms import InventarioForm,CategoriaForm,ProveedorForm,InventarioTiendaForm,RotacionInventarioForm,TiposRopaForm
 
 # vista del home
 def home(request):
-    return render (request, 'htmls/home.html')
+    # Consultar todas las instancias del modelo
+    inventario = Inventarioalmacen.objects.all()
+    
+    # Extraer las cantidades en stock y los nombres de las categorías
+    cantidades_en_stock = [item.cantidad_en_stock for item in inventario]
+    nombres_categorias = [item.categoria.nombre for item in inventario if item.categoria]  # Verificar que item.categoria no sea None
+
+    # Agrega líneas de depuración para ver lo que se está pasando al contexto
+    print("Cantidades en stock:", cantidades_en_stock)  # Esto se mostrará en la consola
+    print("Nombres de categorías:", nombres_categorias)  # Esto se mostrará en la consola
+
+    # Devolver la lista al contexto
+    return render(request, 'htmls/home.html', {
+        'cantidades_en_stock': cantidades_en_stock,
+        'nombres_categorias': nombres_categorias,
+    })
 
 #vista del inventario
 @login_required
@@ -339,7 +357,33 @@ def eliminar_rotacionInventario(request,rotacion_id):
 
 #eliminar Tipo de Ropa:
 def eliminar_tipoRopa(request,tipoRopa_id):
-    elimTipoRopa = get_object_or_404(Tiposderopa,pk=tipoRopa_id)
-    elimTipoRopa.delete()
-    messages.add_message(request, messages.SUCCESS, 'Tipo de Ropa eliminado correctamente')
+    if request.method == "POST":
+        elimTipoRopa = get_object_or_404(Tiposderopa,pk=tipoRopa_id)
+        password = request.POST.get('password')
+        user = request.user
+        if user.is_authenticated and user.is_superuser:
+            # Autenticar al usuario con la contraseña proporcionada
+            authenticated_user = authenticate(request, username=user.username, password=password)
+            if authenticated_user is not None:
+                # Si la autenticación es exitosa, eliminar la categoría
+                elimTipoRopa.delete()
+                messages.add_message(request, messages.SUCCESS, 'Tipo de Ropa eliminado correctamente')
+            else:
+                messages.error(request, 'Contraseña incorrecta. No se pudo eliminar la categoría.')
+        else:
+            messages.error(request, 'No tienes permisos para realizar esta acción.')
+    
     return redirect('listar_tiposRopa')
+
+def stock_view(request):
+    # Consultar todas las instancias del modelo
+    inventario = Inventarioalmacen.objects.all()
+    
+    # Extraer las cantidades en stock y almacenarlas en un array
+    cantidades_en_stock = [item.cantidad_en_stock for item in inventario]
+
+    # Agrega una línea de depuración para ver lo que se está pasando al contexto
+    print("Cantidades en stock:", cantidades_en_stock)  # Esto se mostrará en la consola
+
+    # Devolver la lista al contexto
+    return render(request, 'htmls/home.html', {'cantidades_en_stock': cantidades_en_stock})

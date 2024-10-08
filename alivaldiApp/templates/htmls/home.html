@@ -2,6 +2,7 @@
 {% block content %}
 {% load static %}
 <h3>Inicio</h3>
+
 {% if not request.user.is_authenticated %}
     <hr>
     <h4>Bienvenido a Alivaldi</h4>
@@ -53,7 +54,7 @@
                             <li>Honestidad</li>
                             <li>Lealtad</li>
                             <li>Compromiso</li>
-                            <li>Diciplina</li>
+                            <li>Disciplina</li>
                             <li>Responsabilidad</li>
                             <li>Competitividad</li>
                         </ul>
@@ -64,5 +65,68 @@
     </div>
     <!-- Fin de la información de la empresa -->
 
+    {% elif request.user.is_authenticated and request.user.is_superuser %}
+    <hr>
+    <h4>Graficas</h4>
+    <br>
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript">
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Cantidad de Ropa en almacen por Categoría',
+            },
+            subtitle: {
+                text: 'Reporte de columnas'
+            },
+            xAxis: {
+                categories: {{ nombres_categorias|safe }},  // Asignar nombres de categorías al eje X
+                crosshair: true,
+                accessibility: {
+                    description: 'Categorías'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de Ropa en almacén'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' (piezas)'
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Cantidad',
+                    data: {{ cantidades_en_stock|safe }},  // Asignar cantidades en stock a la serie de datos
+                    showInLegend: false,
+                    colorByPoint: true,
+                },
+            ]
+        });
+    </script>
+{% else %}
+    <!-- Contenido para usuarios autenticados que no son superusuarios -->
+    <hr>
+    <h4>Bienvenido de nuevo, {{ request.user.username }}! (Usuario normal)</h4>
+
+    <p>Aquí puedes gestionar tu cuenta o ver contenido exclusivo para usuarios registrados.</p>
+    
 {% endif %}
 {% endblock %}
