@@ -77,9 +77,9 @@
 
 {% else %}
     <!-- Contenido visible para otros usuarios -->
-    <h1>Bienvenido, Usuario</h1>
-    <p>Aquí está el contenido visible para los usuarios regulares.</p>
-    <h1>Hola </h1>
+    <h1>Bienvenido, Usuario {{user.username | upper}} </h1>
+    <p> Tabla del inventario en alivaldi</p>
+    
 {% endif %}
 
 {% endblock %}

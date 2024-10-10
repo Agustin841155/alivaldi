@@ -14,20 +14,25 @@ from .forms import InventarioForm,CategoriaForm,ProveedorForm,InventarioTiendaFo
 # vista del home
 def home(request):
     # Consultar todas las instancias del modelo
-    inventario = Inventarioalmacen.objects.all()
+    inventarioalmacen = Inventarioalmacen.objects.all()
+    inventariotienda = Inventariotienda.objects.all()
     
     # Extraer las cantidades en stock y los nombres de las categorías
-    cantidades_en_stock = [item.cantidad_en_stock for item in inventario]
-    nombres_categorias = [item.categoria.nombre for item in inventario if item.categoria]  # Verificar que item.categoria no sea None
+    cantidades_en_stock_almacen = [item.cantidad_en_stock for item in inventarioalmacen]
+    nombres_categorias_almacen = [item.categoria.nombre for item in inventarioalmacen if item.categoria]  # Verificar que item.categoria no sea None
+    cantidad_en_stock_tienda = [item.cantidad_en_stock for item in inventariotienda]
+    categorias_tienda = [item.categoria.nombre for item in inventariotienda if item.categoria]
 
     # Agrega líneas de depuración para ver lo que se está pasando al contexto
-    print("Cantidades en stock:", cantidades_en_stock)  # Esto se mostrará en la consola
-    print("Nombres de categorías:", nombres_categorias)  # Esto se mostrará en la consola
+    print("Cantidades en stock:", cantidades_en_stock_almacen)  # Esto se mostrará en la consola
+    print("Nombres de categorías:", nombres_categorias_almacen)  # Esto se mostrará en la consola
 
     # Devolver la lista al contexto
     return render(request, 'htmls/home.html', {
-        'cantidades_en_stock': cantidades_en_stock,
-        'nombres_categorias': nombres_categorias,
+        'cantidades_en_stock': cantidades_en_stock_almacen,
+        'nombres_categorias': nombres_categorias_almacen,
+        'cantidades_en_stock_tienda': cantidad_en_stock_tienda,
+        'categorias_tienda': categorias_tienda,
     })
 
 #vista del inventario
