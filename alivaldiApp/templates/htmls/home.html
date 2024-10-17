@@ -65,7 +65,7 @@
     <!-- Fin de la información de la empresa -->
 
     {% elif request.user.is_authenticated and request.user.is_superuser %}
-    <h1>Bienvenido de vuelta {{user.username | upper }}</h1>
+    <h1>Bienvenido de vuelta {{user.username | upper }}!</h1>
     <hr>
     <h4>Graficas</h4>
     <br>
@@ -174,10 +174,62 @@
     </script>
 {% else %}
     <!-- Contenido para usuarios autenticados que no son superusuarios -->
+    <h4>Bienvenido de nuevo, {{ request.user.username | upper }}!</h4>
     <hr>
-    <h4>Bienvenido de nuevo, {{ request.user.username }}! (Usuario normal)</h4>
+    <h4>Grafica</h4>
+    <br>
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-34">
+                <div id="garficaTienda"></div>
+            </div>
+        </div>
+    </div>
 
-    <p>Aquí puedes gestionar tu cuenta o ver contenido exclusivo para usuarios registrados.</p>
+    <script type="application/javascript">
+        Highcharts.chart('garficaTienda', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Cantidad de Ropa en Tienda por Tipo de Ropa',
+            },
+            subtitle: {
+                text: 'Reporte de columnas'
+            },
+            xAxis: {
+                categories: {{ tipoRopa_tienda|safe }},  // Asignar nombres de categorías al eje X
+                crosshair: true,
+                accessibility: {
+                    description: 'Categorías'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de Ropa en tienda'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' (piezas)'
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Cantidad',
+                    data: {{ cantidades_en_stock_tienda|safe }},  // Asignar cantidades en stock a la serie de datos
+                    showInLegend: false,
+                    colorByPoint: true,
+                },
+            ]
+        });
+    </script>
     
 {% endif %}
 {% endblock %}

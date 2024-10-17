@@ -37,3 +37,8 @@ class TiposRopaForm(forms.ModelForm):
     class Meta:
         model = Tiposderopa
         fields = ['tipo','descripcion']
+
+class formTienda(forms.ModelForm):
+    class Meta:
+        model = Inventariotienda
+        fields = [ 'cantidad_en_stock', 'actualizado_por','descripcion']

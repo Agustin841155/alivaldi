@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from .models import Categorias,Inventarioalmacen,Proveedores,Inventariotienda,Rotacioninventario,Tiposderopa
-from .forms import InventarioForm,CategoriaForm,ProveedorForm,InventarioTiendaForm,RotacionInventarioForm,TiposRopaForm
+from .forms import InventarioForm,CategoriaForm,ProveedorForm,InventarioTiendaForm,RotacionInventarioForm,TiposRopaForm,formTienda
 
 # vista del home
 def home(request):
@@ -22,23 +22,22 @@ def home(request):
     nombres_categorias_almacen = [item.categoria.nombre for item in inventarioalmacen if item.categoria]  # Verificar que item.categoria no sea None
     cantidad_en_stock_tienda = [item.cantidad_en_stock for item in inventariotienda]
     categorias_tienda = [item.categoria.nombre for item in inventariotienda if item.categoria]
-
-    # Agrega líneas de depuración para ver lo que se está pasando al contexto
-    print("Cantidades en stock:", cantidades_en_stock_almacen)  # Esto se mostrará en la consola
-    print("Nombres de categorías:", nombres_categorias_almacen)  # Esto se mostrará en la consola
+    tipoRopa_tienda = [item.tipo_de_ropa.tipo for item in inventariotienda if item.tipo_de_ropa]
 
     # Devolver la lista al contexto
     return render(request, 'htmls/home.html', {
         'cantidades_en_stock': cantidades_en_stock_almacen,
         'nombres_categorias': nombres_categorias_almacen,
         'cantidades_en_stock_tienda': cantidad_en_stock_tienda,
-        'categorias_tienda': categorias_tienda,
+        'categorias_tienda': tipoRopa_tienda,
+        'tipoRopa_tienda': tipoRopa_tienda,
     })
 
 #vista del inventario
 @login_required
 def inventario(request):
-    return render (request, 'htmls/inventario.html')
+    contextInv = {'listar_inventarioTienda' : Inventariotienda.objects.all()}
+    return render (request, 'htmls/inventario.html',contextInv)
 
 #salida logout
 def exit(request):
@@ -380,15 +379,41 @@ def eliminar_tipoRopa(request,tipoRopa_id):
     
     return redirect('listar_tiposRopa')
 
-def stock_view(request):
-    # Consultar todas las instancias del modelo
-    inventario = Inventarioalmacen.objects.all()
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Funciones para el usuario de tienda no ADMIN
+def form_inventarioTiendaNotAdmin(request):
+    if request.method == 'GET': 
+        return render(request, 'htmls/formInvTiendaNotAdmin.html', {
+            'formInvTiNotAdmin': InventarioTiendaForm
+        })
+    else:
+        form= InventarioTiendaForm(request.POST)
+        if form.is_valid():
+            new_datos = form.save(commit=False)
+            new_datos.save()
+            messages.add_message(request=request, level=messages.SUCCESS, message='Producto Agregado al inventario de la Tienda con éxito')
+            return redirect('inventario')
+        else:
+            messages.add_message(request=request, level=messages.ERROR, message='Error al agregar Producto al inventario de la Tienda')
+            return redirect('inventario')
+        
+def actualizar_inventarioTiendaNotAdmin(request,invTiendanoadmin_id):
+    if request.method == 'GET':
+        invTi= get_object_or_404(Inventariotienda,pk=invTiendanoadmin_id)
+        formInv = formTienda(instance=invTi)
+        return render(request, 'htmls/formInvTiendaNotAdmin.html', {
+            'formInvTiNotAdmin': formInv
+            })
+    else:
+        try:
+            invTi= get_object_or_404(Inventariotienda,pk=invTiendanoadmin_id)
+            formInv= formTienda(request.POST, instance=invTi)
+            new_datos = formInv.save(commit=False)
+            new_datos.save()
+            messages.add_message(request=request, level=messages.SUCCESS, message='Producto de Tienda actualizado con éxito')
+            return redirect('inventario')
+        except ValueError:
+            messages.add_message(request=request, level=messages.ERROR, message='Error al actualizar Producto del inventario de Tienda')
+            return redirect('inventario')
     
-    # Extraer las cantidades en stock y almacenarlas en un array
-    cantidades_en_stock = [item.cantidad_en_stock for item in inventario]
-
-    # Agrega una línea de depuración para ver lo que se está pasando al contexto
-    print("Cantidades en stock:", cantidades_en_stock)  # Esto se mostrará en la consola
-
-    # Devolver la lista al contexto
-    return render(request, 'htmls/home.html', {'cantidades_en_stock': cantidades_en_stock})
