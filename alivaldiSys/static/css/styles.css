@@ -112,7 +112,7 @@ nav ul li a:hover {
 }
 
 .custom-btn:hover {
-    background-color: #6A5ACD !important; /* Morado oscuro al pasar el mouse */
+    background-color: C !important; /* Morado oscuro al pasar el mouse */
 }
 
 /* Estilos para los mensajes de éxito, error y advertencia */
@@ -143,4 +143,29 @@ nav ul li a:hover {
     background-color: #fff3cd;
     color: #856404;
     border: 1px solid #ffeeba;
+}
+
+.company-banner {
+    text-align: center;
+    border: 3px solid #6A5ACD;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+}
+
+.company-banner h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+.company-banner p {
+    font-size: 1.5em;
+    margin: 10px 0 0;
+    font-style: italic;
 }
